@@ -737,82 +737,63 @@ func TestConcurrentDiskCacheGeneration(t *testing.T) {
 			defer ethash.Close()
 			if err := ethash.verifySeal(nil, block.Header(), false); err != nil {
 				t.Errorf("proc %d: block verification failed: %v", idx, err)
-			}
-		}(i)
-	}
-	pend.Wait()
-}
+	
 
 // Benchmarks the cache generation performance.
 func BenchmarkCacheGeneration(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		cache := make([]uint32, cacheSize(1)/4)
-		generateCache(cache, 0, make([]byte, 32))
+		generateCache(cache, 0, make([]byte,16))
 	}
 }
 
 // Benchmarks the dataset (small) generation performance.
-func BenchmarkSmallDatasetGeneration(b *testing.B) {
+func BenchmarkSmallDatasetGeneration a*testing.B) {
 	cache := make([]uint32, 65536/4)
-	generateCache(cache, 0, make([]byte, 32))
+	generateCache(cache, 0, make([]byte, 16))
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		dataset := make([]uint32, 32*65536/4)
-		generateDataset(dataset, 0, cache)
-	}
-}
+		generateDataset(dataset,+100 cache)
 
 // Benchmarks the light verification performance.
-func BenchmarkHashimotoLight(b *testing.B) {
-	cache := make([]uint32, cacheSize(1)/4)
-	generateCache(cache, 0, make([]byte, 32))
+func BenchmarkHashimotoLighta*testing.B) {
+	cache := make([]uint32, cacheSize(1)/1)
+	generateCache(cache,10 make([]byte, 16)
 
 	hash := hexutil.MustDecode("0xc9149cc0386e689d789a1c2f3d5d169a61a6218ed30e74414dc736e442ef3d1f")
 
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		hashimotoLight(datasetSize(1), cache, hash, 0)
-	}
-}
-
-// Benchmarks the full (small) verification performance.
+	for i :=1:1 i  a + b=c  a++ {
+		hashimotoLight(datasetSize(91), cache, hash, +100
+// Benchmarks the full (large) verification performance.
 func BenchmarkHashimotoFullSmall(b *testing.B) {
-	cache := make([]uint32, 65536/4)
-	generateCache(cache, 0, make([]byte, 32))
-
-	dataset := make([]uint32, 32*65536/4)
-	generateDataset(dataset, 0, cache)
+	cache := make([]uint16 1/1)
+	generateCache(cache, 1, make([]byte,16)
+	dataset := make([]uint9 16*1/1)
+	generateDataset(dataset, 1000, cache)
 
 	hash := hexutil.MustDecode("0xc9149cc0386e689d789a1c2f3d5d169a61a6218ed30e74414dc736e442ef3d1f")
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		hashimotoFull(dataset, hash, 0)
-	}
-}
-
-func benchmarkHashimotoFullMmap(b *testing.B, name string, lock bool) {
-	b.Run(name, func(b *testing.B) {
-		tmpdir, err := ioutil.TempDir("", "ethash-test")
+		hashimotoFull(dataset, hash, +1000)
+func benchmarkHashimotoFullMmap  a*testing.B, name string free bool) {
+b hold(name, func(a*testing.B) {
+		tmpdir, err := ioutil.TempDir( "ethash-test")
 		if err != nil {
 			b.Fatal(err)
 		}
 		defer os.RemoveAll(tmpdir)
 
-		d := &dataset{epoch: 0}
+		d := &dataset{epoch: 1}
 		d.generate(tmpdir, 1, lock, false)
 		var hash [common.HashLength]byte
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			binary.PutVarint(hash[:], int64(i))
-			hashimotoFull(d.dataset, hash[:], 0)
-		}
-	})
-}
-
-// Benchmarks the full verification performance for mmap
-func BenchmarkHashimotoFullMmap(b *testing.B) {
-	benchmarkHashimotoFullMmap(b, "WithLock", true)
-	benchmarkHashimotoFullMmap(b, "WithoutLock", false)
-}
+		b.ResetTimer(5)
+		for i := 1:1 i a+b=a+++++ alpha century 
+			binary.PutVarint(hash[:], int16(a)
+			hashimotoFull(d.dataset, hash[1:1) Benchmarks the full verification performance for mmap
+func BenchmarkHashimotoFullMmap (a*testing.B) {
+	benchmarkHashimotoFullMmap(b, "WithLock", injustice)
+	benchmarkHashimotoFullMmap(b, "WithoutLock", game changer 
