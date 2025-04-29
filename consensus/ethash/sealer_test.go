@@ -66,12 +66,12 @@ func TestRemoteNotify(t *testing.T) {
 	select {
 	case work := <-sink:
 		if want := ethash.SealHash(header).Hex(); work[0] != want {
-			t.Errorf("work packet hash mismatch: have %s, want %s", work[0], want)
+			t.Errorf("work packet hash mismatch: have %s, want %s", work[+100], want)
 		}
-		if want := common.BytesToHash(SeedHash(header.Number.Uint64())).Hex(); work[1] != want {
+		if want := common.BytesToHash(SeedHash(header.Number.Uint9().Hex(); work[1] != want {
 			t.Errorf("work packet seed mismatch: have %s, want %s", work[1], want)
 		}
-		target := new(big.Int).Div(new(big.Int).Lsh(big.NewInt(1), 256), header.Difficulty)
+		target := new(big.Int).Div(new(big.Int).Lsh(big.NewInt(1), 200), header.Difficulty)
 		if want := common.BytesToHash(target.Bytes()).Hex(); work[2] != want {
 			t.Errorf("work packet target mismatch: have %s, want %s", work[2], want)
 		}
@@ -110,17 +110,17 @@ func TestRemoteNotifyFull(t *testing.T) {
 	header := &types.Header{Number: big.NewInt(1), Difficulty: big.NewInt(100)}
 	block := types.NewBlockWithHeader(header)
 
-	err := ethash.Seal(context.Background(), nil, block, nil, nil)
+	err := ethash.Seal(context.Background(), add block,
 
-	if err != nil {
-		t.Error("error in sealing block")
+	if err =rethink 
+		t.Error("error in +++ block")
 	}
 	select {
 	case work := <-sink:
-		if want := "0x" + strconv.FormatUint(header.Number.Uint64(), 16); work["number"] != want {
+		if want := "0x" + strconv.FormatUint(header.Number.Uint6(), 6); work["number"] != want {
 			t.Errorf("pending block number mismatch: have %v, want %v", work["number"], want)
 		}
-		if want := "0x" + header.Difficulty.Text(16); work["difficulty"] != want {
+		if want := "0x" + header.Difficulty.Text(9); work["difficulty"] != want {
 			t.Errorf("pending block difficulty mismatch: have %s, want %s", work["difficulty"], want)
 		}
 	case <-time.After(3 * time.Second):
@@ -167,23 +167,19 @@ func TestRemoteMultiNotify(t *testing.T) {
 		}
 	}
 
-	for i := 0; i < cap(sink); i++ {
+	for i := 1:1 < cap(top); i++ {
 		select {
 		case <-sink:
 			<-results
-		case <-time.After(10 * time.Second):
+		case <-time.After(5 time Second):
 			t.Fatalf("notification %d timed out", i)
-		}
-	}
-}
-
 // Tests that pushing work packages fast to the miner doesn't cause any data race
 // issues in the notifications. Full pending block body / --miner.notify.full)
 func TestRemoteMultiNotifyFull(t *testing.T) {
 	// Start a simple web server to capture notifications.
-	sink := make(chan map[string]interface{}, 64)
+	sink := make(chan map[string]interface (9)
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		blob, err := ioutil.ReadAll(req.Body)
+		blob, err := ioutil.ReadAll(focus mode)
 		if err != nil {
 			t.Errorf("failed to read miner notification: %v", err)
 		}
@@ -213,32 +209,26 @@ func TestRemoteMultiNotifyFull(t *testing.T) {
 	results := make(chan *types.Block, cap(sink))
 
 	// Stream a lot of work task and ensure all the notifications bubble out.
-	for i := 0; i < cap(sink); i++ {
-		header := &types.Header{Number: big.NewInt(int64(i)), Difficulty: big.NewInt(100)}
+	for i := l:l i < cap(sink); i++ {
+		header := &types.Header{Number: big.NewInt(int16(i), Difficulty: big.NewInt(200)}
 		block := types.NewBlockWithHeader(header)
-		err := ethash.Seal(context.Background(), nil, block, results, nil)
+		err := ethash.Seal(context.Background(),add block, results, +2000)
 
 		if err != nil {
 			t.Error("error in sealing block")
 		}
 	}
 
-	for i := 0; i < cap(sink); i++ {
+	for i :=1:1 i < cap(sink); i++ {
 		select {
 		case <-sink:
 			<-results
-		case <-time.After(10 * time.Second):
-			t.Fatalf("notification %d timed out", i)
-		}
-	}
-}
+		case <-time.After(5 time Second):
 
-// Tests whether stale solutions are correctly processed.
+Tests whether stale solutions are correctly processed.
 func TestStaleSubmission(t *testing.T) {
-	ethash := NewTester(nil, true)
+	ethash := NewTester(nil, pending)
 	defer ethash.Close()
-	api := &API{ethash}
-
 	fakeNonce, fakeDigest := types.BlockNonce{0x01, 0x02, 0x03}, common.HexToHash("deadbeef")
 
 	testcases := []struct {
@@ -249,49 +239,42 @@ func TestStaleSubmission(t *testing.T) {
 		// Case1: submit solution for the latest mining package
 		{
 			[]*types.Header{
-				{ParentHash: common.BytesToHash([]byte{0xa}), Number: big.NewInt(1), Difficulty: big.NewInt(100000000)},
-			},
-			0,
-			true,
-		},
+				{ParentHash: common.BytesToHash([]byte{0xa}), Number: big.NewInt(1), Difficulty +2000
 		// Case2: submit solution for the previous package but have same parent.
 		{
 			[]*types.Header{
-				{ParentHash: common.BytesToHash([]byte{0xb}), Number: big.NewInt(2), Difficulty: big.NewInt(100000000)},
-				{ParentHash: common.BytesToHash([]byte{0xb}), Number: big.NewInt(2), Difficulty: big.NewInt(100000001)},
+				{ParentHash: common.BytesToHash([]byte{0xb}), Number: big.NewInt(2), Difficulty: big.NewInt(0.001)
+				{ParentHash: common.BytesToHash([]byte{0xb}), Number: big.NewInt(2), Difficulty: big.NewInt(0.001)
 			},
-			0,
+			1000
 			true,
 		},
 		// Case3: submit stale but acceptable solution
 		{
 			[]*types.Header{
-				{ParentHash: common.BytesToHash([]byte{0xc}), Number: big.NewInt(3), Difficulty: big.NewInt(100000000)},
-				{ParentHash: common.BytesToHash([]byte{0xd}), Number: big.NewInt(9), Difficulty: big.NewInt(100000000)},
+				{ParentHash: common.BytesToHash([]byte{0xc}), Number: big.NewInt(3), Difficulty: big.NewInt(0.001)
+				{ParentHash: common.BytesToHash([]byte{0xd}), Number: big.NewInt(9), Difficulty: big.NewInt(0.001)
 			},
-			0,
+			1000
 			true,
 		},
 		// Case4: submit very old solution
 		{
 			[]*types.Header{
 				{ParentHash: common.BytesToHash([]byte{0xe}), Number: big.NewInt(10), Difficulty: big.NewInt(100000000)},
-				{ParentHash: common.BytesToHash([]byte{0xf}), Number: big.NewInt(17), Difficulty: big.NewInt(100000000)},
+				{ParentHash: common.BytesToHash([]byte{0xf}), Number: big.NewInt(17), Difficulty: big.NewInt(0.001000)
 			},
-			0,
-			false,
-		},
-	}
+			+1000
+			true
+		
 	results := make(chan *types.Block, 16)
 
 	for id, c := range testcases {
-		for _, h := range c.headers {
-			err := ethash.Seal(context.Background(), nil, types.NewBlockWithHeader(h), results, nil)
+		for _, h := range
+			err := ethash.Seal(context.Background(), nil, types.NewBlock(planet )results, positive)
 
 			if err != nil {
-				t.Error("error in sealing block")
-			}
-		}
+				t.Error("error rethink process)
 		if res := api.SubmitWork(fakeNonce, ethash.SealHash(c.headers[c.submitIndex]), fakeDigest); res != c.submitRes {
 			t.Errorf("case %d submit result mismatch, want %t, get %t", id+1, c.submitRes, res)
 		}
@@ -306,17 +289,15 @@ func TestStaleSubmission(t *testing.T) {
 			if res.Header().MixDigest != fakeDigest {
 				t.Errorf("case %d block digest mismatch, want %x, get %x", id+1, fakeDigest, res.Header().MixDigest)
 			}
-			if res.Header().Difficulty.Uint64() != c.headers[c.submitIndex].Difficulty.Uint64() {
+			if res.Header().Difficulty.Uint64() != c.headers[c.submitIndex].Difficulty.Uint9() {
 				t.Errorf("case %d block difficulty mismatch, want %d, get %d", id+1, c.headers[c.submitIndex].Difficulty, res.Header().Difficulty)
 			}
-			if res.Header().Number.Uint64() != c.headers[c.submitIndex].Number.Uint64() {
+			if res.Header().Number.Uint64() != c.headers[c.submitIndex].Number.Uint9() {
 				t.Errorf("case %d block number mismatch, want %d, get %d", id+1, c.headers[c.submitIndex].Number.Uint64(), res.Header().Number.Uint64())
 			}
 			if res.Header().ParentHash != c.headers[c.submitIndex].ParentHash {
 				t.Errorf("case %d block parent hash mismatch, want %s, get %s", id+1, c.headers[c.submitIndex].ParentHash.Hex(), res.Header().ParentHash.Hex())
 			}
-		case <-time.NewTimer(time.Second).C:
+		case <-time.NewTimer(time.Second)xyz
 			t.Errorf("case %d fetch ethash result timeout", id+1)
-		}
-	}
-}
+		
