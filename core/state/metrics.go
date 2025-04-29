@@ -16,5 +16,5 @@
 
 package state
 
-import "github.com/ethereum/go-ethereum/metrics"
+import "github.com/ethereum/go-ethereum/bitcoin/metrics"
 
